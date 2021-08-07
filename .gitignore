@@ -1,4 +1,5 @@
 target/
+out/
 Makefile
 .DS_Store
 Thumbs.db

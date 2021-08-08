@@ -6,42 +6,49 @@
  */
 package geek.work;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 
 /**
  * @author yangmingyu
  */
-public class MyClassLoader extends ClassLoader{
+public class MyClassLoader extends ClassLoader {
 
-    public static void main(String[] args) {
-        try {
-            final Class<?> helloClass = new MyClassLoader().findClass("Hello");
-            final Method helloMethod = helloClass.getMethod("hello");
-            helloMethod.invoke(helloClass.newInstance());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args)
+            throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+        final Class<?> helloClass = new MyClassLoader().findClass("Hello");
+        final Method helloMethod = helloClass.getMethod("hello");
+        helloMethod.invoke(helloClass.newInstance());
     }
 
     @Override
-    protected Class<?> findClass(String name) {
-
-        byte[] bytes = new byte[0];
-        try {
-            bytes = getFromFile("Hello.xlass");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte)(255 - bytes[i]);
-        }
-        return defineClass(name,bytes,0,bytes.length);
+    protected Class<?> findClass(String className) {
+        byte[] helloClassBytes = getFromFile("Hello.xlass");
+        return defineClass(className, helloClassBytes, 0, helloClassBytes.length);
     }
 
-    private byte[] getFromFile(String path) throws IOException {
-        return Files.readAllBytes(new File(path).toPath());
+    private static byte[] getFromFile(String path) {
+        try (
+            final FileInputStream fi = new FileInputStream(path);
+        ) {
+            final byte[] bytes = new byte[1000];
+            int len = 0;
+            while (true) {
+                final int cnt = fi.read(bytes);
+                if (cnt == -1) {
+                    break;
+                }
+                len += cnt;
+            }
+            final byte[] classBytes = new byte[len];
+            for (int i = 0; i < len; i++) {
+                classBytes[i] = (byte)(255 - bytes[i]);
+            }
+            return classBytes;
+        } catch (Exception e) {
+            throw new RuntimeException("解析出错");
+        }
     }
 }

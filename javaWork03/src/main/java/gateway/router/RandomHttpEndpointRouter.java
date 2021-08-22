@@ -19,6 +19,18 @@ public class RandomHttpEndpointRouter implements HttpEndpointRouter {
     public String route(List<String> urls) {
         int size = urls.size();
         Random random = new Random(System.currentTimeMillis());
-        return urls.get(random.nextInt(size));
+        int range = random.nextInt() % 100;
+        String url = urls.get(0);
+        for (int i = 0; i < urls.size(); i++) {
+            if (range < 20 && urls.get(i).contains("8801")) {
+                url = urls.get(i);
+                break;
+            }
+            if (range >= 20 && urls.get(i).contains("8802")) {
+                url = urls.get(i);
+                break;
+            }
+        }
+        return url;
     }
 }

@@ -15,7 +15,14 @@ public class HeaderHttpResponseFilter implements HttpResponseFilter {
 
     @Override
     public void filter(FullHttpResponse response) {
-        response.headers().set("ran", "00");
+        byte[] array = response.content().array();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : array) {
+            sb.append((char) b);
+        }
+        if (sb.toString().contains("ran")) {
+            response.headers().set("ran", "00");
+        }
     }
 
 }

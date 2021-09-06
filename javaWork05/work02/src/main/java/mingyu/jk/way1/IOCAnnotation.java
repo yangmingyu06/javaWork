@@ -1,4 +1,4 @@
-package mingyu.jk; /**
+package mingyu.jk.way1; /**
  * @(#)AppConfig.java, 9月 06, 2021.
  * <p>
  * Copyright 2021 fenbi.com. All rights reserved.

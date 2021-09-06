@@ -1,4 +1,4 @@
-package mingyu.jk; /**
+package mingyu.jk.way1; /**
  * @(#)App.java, 9月 06, 2021.
  * <p>
  * Copyright 2021 fenbi.com. All rights reserved.
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class App {
     public App() {
-        System.out.println("mingyu.jk.App 被创建了");
+        System.out.println("mingyu.jk.way1.App 被创建了");
     }
 
     public void sayHello() {

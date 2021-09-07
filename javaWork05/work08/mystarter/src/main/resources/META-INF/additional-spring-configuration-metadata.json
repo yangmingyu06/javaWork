@@ -1,0 +1,21 @@
+{
+  "properties": [
+    {
+      "name": "user.name",
+      "type": "java.lang.String",
+      "description": "Description for user.name",
+      "defaultValue": ""
+    },
+    {
+      "name": "user.age",
+      "type": "java.lang.Long",
+      "description": "Description for user.age",
+      "defaultValue": 0
+    },
+    {
+      "name": "mystarter.enable",
+      "type": "java.lang.String",
+      "description": "Description for mystarter.enable."
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
@@ -36,6 +37,19 @@ public class JdbcTest {
 //            updateTestPrepareStatement(connection);
 //            deleteTestPrepareStatement(connection);
 //            final long l = batchCreatTestPrepareStatement(connection);
+            try {
+                connection.setAutoCommit(false);
+                creatTestPrepareStatement(connection);
+                deleteTestPrepareStatement(connection);
+                updateTestPrepareStatement(connection);
+                connection.commit();
+            } catch (SQLException s) {
+                connection.rollback();
+            } finally {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

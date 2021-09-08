@@ -6,8 +6,11 @@
  */
 package mingyu.jdbc;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import mingyu.jdbc.data.Student;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -27,6 +30,21 @@ public class JdbcTest {
     private static String JDBC_PASSWORD = "yangmingyu23";
 
     public static void main(String[] args) {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(JDBC_URL);
+        config.setUsername(JDBC_USER);
+        config.setPassword(JDBC_PASSWORD);
+        config.addDataSourceProperty("connectionTimeout", "1000"); // 连接超时：1秒
+        config.addDataSourceProperty("idleTimeout", "60000"); // 空闲超时：60秒
+        config.addDataSourceProperty("maximumPoolSize", "10"); // 最大连接数：10
+        DataSource ds = new HikariDataSource(config);
+
+        try (Connection connection = ds.getConnection()) {
+            creatTestPrepareStatement(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {
 //            creatTest(connection);
 //            searchTest(connection);
@@ -37,18 +55,19 @@ public class JdbcTest {
 //            updateTestPrepareStatement(connection);
 //            deleteTestPrepareStatement(connection);
 //            final long l = batchCreatTestPrepareStatement(connection);
-            try {
-                connection.setAutoCommit(false);
-                creatTestPrepareStatement(connection);
-                deleteTestPrepareStatement(connection);
-                updateTestPrepareStatement(connection);
-                connection.commit();
-            } catch (SQLException s) {
-                connection.rollback();
-            } finally {
-                connection.setAutoCommit(true);
-                connection.close();
-            }
+//            try {
+//                connection.setAutoCommit(false);
+//                creatTestPrepareStatement(connection);
+//                deleteTestPrepareStatement(connection);
+//                updateTestPrepareStatement(connection);
+//                connection.commit();
+//            } catch (SQLException s) {
+//                connection.rollback();
+//            } finally {
+//                connection.setAutoCommit(true);
+//                connection.close();
+//            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
